@@ -85,6 +85,67 @@ app.get('/users/:id', async (req, res) => {
 
 // SEND TASKS TO FRONTEND
 app.get('/tasks', (req, res) => {  
+    theRealDeal()  
+    newTask.find()
+        .then((tasks)=> {
+            res.status(200).json(tasks)
+        })
+        .catch((error) => {
+            res.send(error);
+        }) 
+})
+
+// 2. SIGN UP
+app.post('/signup', (req, res)=> {
+    const username = req.body['username']
+    const email = req.body['email']
+    const password = req.body['password']
+    const Confirm_password = req.body['confirmPassword'] 
+
+    if (password === Confirm_password) {
+        let newuser = new newUser({username, email, password})
+        const id = newuser._id
+        newuser.save()
+        .then(res.redirect(`https://remind-me-app-ochre.vercel.app/tasks/${id}`))
+    }
+    else {
+        res.send('<h1>Passwords do not match!</h1> <h3>Please go back and sign up again<h3>')
+    }
+})
+
+// NEW TASK
+app.post('/create/:id', async (req, res)=> {
+
+    const id = req.params.id
+    let username = ""
+    let data = []
+    await database.collection('profiles')
+        .find()
+        .forEach(profile => data.push(profile)) 
+        .then(() => {
+            for (let i = 0; i < data.length; i++) {
+                if (data[i]._id == id) {
+                    username = data[i].username
+                    break           
+                }
+
+            }
+        })
+
+    const title = req.body['title']
+    const datetime = req.body['datetime']
+    const description = req.body['description']
+    const name = username
+
+    let newtask = new newTask({name, title, datetime, description})
+    newtask.save()
+    .then(res.redirect(`https://remind-me-app-ochre.vercel.app/tasks/${id}`))
+})
+
+
+
+// SENDING THE REMINDER VIA EMAIL
+const theRealDeal = () => {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -142,62 +203,7 @@ app.get('/tasks', (req, res) => {
                     })                 
                 }
             })
-        })  
-    newTask.find()
-        .then((tasks)=> {
-            res.status(200).json(tasks)
         })
-        .catch((error) => {
-            res.send(error);
-        }) 
-})
-
-// 2. SIGN UP
-app.post('/signup', (req, res)=> {
-    const username = req.body['username']
-    const email = req.body['email']
-    const password = req.body['password']
-    const Confirm_password = req.body['confirmPassword'] 
-
-    if (password === Confirm_password) {
-        let newuser = new newUser({username, email, password})
-        const id = newuser._id
-        newuser.save()
-        .then(res.redirect(`https://remind-me-app-ochre.vercel.app/tasks/${id}`))
-    }
-    else {
-        res.send('<h1>Passwords do not match!</h1> <h3>Please go back and sign up again<h3>')
-    }
-})
-
-// NEW TASK
-app.post('/create/:id', async (req, res)=> {
-
-    const id = req.params.id
-    let username = ""
-    let data = []
-    await database.collection('profiles')
-        .find()
-        .forEach(profile => data.push(profile)) 
-        .then(() => {
-            for (let i = 0; i < data.length; i++) {
-                if (data[i]._id == id) {
-                    username = data[i].username
-                    break           
-                }
-
-            }
-        })
-
-    const title = req.body['title']
-    const datetime = req.body['datetime']
-    const description = req.body['description']
-    const name = username
-
-    let newtask = new newTask({name, title, datetime, description})
-    newtask.save()
-    .then(res.redirect(`https://remind-me-app-ochre.vercel.app/tasks/${id}`))
-})
-
+}
 
     
