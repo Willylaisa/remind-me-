@@ -28,7 +28,7 @@ mongoose.connection.on("error", err => {
 // CONNECT TO DATABASE
 let database; // global variable to store the MongoDB connection object
 function connectDB (callback) {    
-    MongoClient.connect(process.env.MONGO_URI)
+    MongoClient.connect('mongodb+srv://codenito:Code.007@nodeapi.xr7lkoc.mongodb.net/Remind-Me?retryWrites=true&w=majority')
     .then((connected)=>{
         database = connected.db()
         return callback()
