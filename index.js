@@ -140,17 +140,17 @@ app.post('/create/:id', async (req, res) => {
 
     let newtask = new newTask({ name, title, datetime, description });
 
+    // Create the transporter outside the .then() block
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'dddtestfammail@gmail.com', // Updated email
+            pass: 'puhnradfigifnalb'          // Updated password
+        }
+    });
+
     newtask.save()
         .then(() => {
-            // Send email immediately after saving the task
-            const transporter = nodemailer.createTransport({
-                service: 'gmail',
-                auth: {
-                    user: 'dddtestfammail@gmail.com', // Updated email
-                    pass: 'puhnradfigifnalb'          // Updated password
-                }
-            });
-
             // Find user email for the task
             return newUser.findOne({ username: name });
         })
@@ -159,7 +159,7 @@ app.post('/create/:id', async (req, res) => {
                 const email = user.email;
 
                 const mailOptions = {
-                    from: 'dddtestfammail@gmail.com', // Updated email
+                    from: 'dddtestfammail@gmail.com',
                     to: email,
                     subject: `Reminder: ${title}`,
                     html: `
@@ -189,4 +189,3 @@ app.post('/create/:id', async (req, res) => {
             res.send('<h1>Error sending email!</h1>');
         });
 });
-
