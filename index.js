@@ -85,8 +85,8 @@ app.get('/tasks', (req, res) => {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: 'reminders.remindme@gmail.com',
-            pass: 'beaozarhzyrcaozg'
+            user: 'dddtestfammail@gmail.com',
+            pass: 'puhnradfigifnalb'
         }
     });
 
