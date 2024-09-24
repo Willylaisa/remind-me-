@@ -144,8 +144,8 @@ app.post('/create/:id', async (req, res) => {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: 'dddtestfammail@gmail.com', // Updated email
-            pass: 'puhnradfigifnalb'          // Updated password
+            user: 'reminders.remind@gmail.com', // Updated email
+            pass: 'xloihajycqkuslxv'          // Updated password
         }
     });
 
@@ -159,7 +159,7 @@ app.post('/create/:id', async (req, res) => {
                 const email = user.email;
 
                 const mailOptions = {
-                    from: 'dddtestfammail@gmail.com',
+                    from: 'reminders.remind@gmail.com',
                     to: email,
                     subject: `Reminder: ${title}`,
                     html: `
