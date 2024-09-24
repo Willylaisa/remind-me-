@@ -82,14 +82,6 @@ app.get('/users/:id', async (req, res) => {
 
 // SEND TASKS TO FRONTEND
 app.get('/tasks', (req, res) => {
-    const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: 'dddtestfammail@gmail.com',
-            pass: 'puhnradfigifnalb'
-        }
-    });
-
     let allTasks;
     let allUsers;
     newTask.find()
@@ -154,21 +146,20 @@ app.post('/create/:id', async (req, res) => {
             const transporter = nodemailer.createTransport({
                 service: 'gmail',
                 auth: {
-                    user: 'dddtestfammail@gmail.com',
-                    pass: 'puhnradfigifnalb'
+                    user: 'dddtestfammail@gmail.com', // Updated email
+                    pass: 'puhnradfigifnalb'          // Updated password
                 }
             });
 
-            let email;
             // Find user email for the task
             return newUser.findOne({ username: name });
         })
         .then(user => {
             if (user) {
-                email = user.email;
+                const email = user.email;
 
                 const mailOptions = {
-                    from: 'dddtestfammail@gmail.com',
+                    from: 'dddtestfammail@gmail.com', // Updated email
                     to: email,
                     subject: `Reminder: ${title}`,
                     html: `
@@ -198,3 +189,4 @@ app.post('/create/:id', async (req, res) => {
             res.send('<h1>Error sending email!</h1>');
         });
 });
+
